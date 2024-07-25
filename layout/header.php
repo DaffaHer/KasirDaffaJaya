@@ -30,5 +30,6 @@
         
         <!-- Bagian Sidebar -->
         <?php include 'layout/sidebar.php'; ?>
+        
         <?php include 'database/koneksi.php'; ?>
         <!-- Header End -->

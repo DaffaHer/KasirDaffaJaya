@@ -25,11 +25,11 @@
             </div>
             <div class="form-group">
                 <label>Harga Satuan</label>
-                <input name="stok_barang" type="text" class="form-control" placeholder="Harga Satuan" required>
+                <input name="harga_barang" type="text" class="form-control" placeholder="Harga Satuan" required>
             </div>
             <div class="form-group">
                 <label>Stok Barang</label>
-                <input name="harga_barang" type="text" class="form-control" placeholder="Stok Barang" required>
+                <input name="stok_barang" type="text" class="form-control" placeholder="Stok Barang" required>
             </div>
             <div class="form-group">
                 <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
@@ -58,8 +58,8 @@
 if(isset($_POST['simpan'])){
 
     $nama_barang = $_POST['nama_barang'];
-    $stok_barang = $_POST['harga_barang'];
-    $harga_barang = $_POST['stok_barang'];
+    $stok_barang = $_POST['stok_barang'];
+    $harga_barang = $_POST['harga_barang'];
 
     $pdo = koneksi::connect();
     $sql = "INSERT INTO barang (nama_barang,harga_barang,stok_barang) VALUES (?,?,?)";

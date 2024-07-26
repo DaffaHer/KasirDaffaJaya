@@ -18,24 +18,32 @@
             <h3>Tambah Barang</h3>
         </div>
         
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label>Nama Barang</label>
                 <input name="nama_barang" type="text" class="form-control" placeholder="Nama Barang" required>
             </div>
+
             <div class="form-group">
                 <label>Harga Satuan</label>
                 <input name="harga_barang" type="text" class="form-control" placeholder="Harga Satuan" required>
             </div>
+
             <div class="form-group">
                 <label>Stok Barang</label>
                 <input name="stok_barang" type="text" class="form-control" placeholder="Stok Barang" required>
             </div>
+
+            <div class="form-group">
+                <label>Gambar Barang</label>
+                <input name="gambar" type="file" class="form-control" placeholder="gambar" required>
+            </div>
+
             <div class="form-group">
                 <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
                 <a href="index.php?page=barang" class="btn btn-secondary">Kembali</a>
             </div>
-        </form>
+                        </form>
                      </div>
              </div>
     </div>
@@ -57,16 +65,31 @@
 
 if(isset($_POST['simpan'])){
 
-    $nama_barang = $_POST['nama_barang'];
-    $stok_barang = $_POST['stok_barang'];
-    $harga_barang = $_POST['harga_barang'];
+    $nama_barang = htmlspecialchars($_POST['nama_barang']);
+    $stok_barang = htmlspecialchars($_POST['stok_barang']);
+    $harga_barang = htmlspecialchars($_POST['harga_barang']);
 
-    $pdo = koneksi::connect();
-    $sql = "INSERT INTO barang (nama_barang,harga_barang,stok_barang) VALUES (?,?,?)";
-    $q = $pdo->prepare($sql);
-    $q->execute(array($nama_barang,$harga_barang,$stok_barang));
+    $image = $_FILES["gambar"]["name"];
+    $tmpname = $_FILES["gambar"]["tmp_name"];
+    $error = $_FILES["gambar"]["error"];
 
-    koneksi::disconnect();
-    echo "<script> window.location.href = 'index.php?page=barang' </script> ";
+    if ($error === UPLOAD_ERR_OK) {
+        $newfilename = uniqid() . "." . pathinfo($image, PATHINFO_EXTENSION);
+        if (move_uploaded_file($tmpname, 'uploads/' . $newfilename)) {
+
+            $pdo = koneksi::connect();
+            $sql = "INSERT INTO barang (nama_barang,harga_barang,stok_barang,gambar) VALUES (?,?,?,?)";
+            $q = $pdo->prepare($sql);
+            $q->execute(array($nama_barang, $harga_barang, $stok_barang, $newfilename));
+            koneksi::disconnect();
+            
+            echo "<script> window.location.href = 'index.php?page=barang' </script>";
+        } else {
+            echo "Failed to move uploaded file.";
+        }
+    } else {
+        echo "Failed to upload file. Error code: " . $error;
+    }
 }
+
 ?>

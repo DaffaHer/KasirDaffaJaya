@@ -40,6 +40,7 @@
                             <th>Nama Barang</th>
                             <th>Harga Satuan</th>
                             <th>Stok Barang</th>
+                            <th>Gambar Barang</th>
                             <th>AKSI</th>
                         </tr>
                     </thead>
@@ -58,6 +59,16 @@
                                     <td><?php echo htmlspecialchars($row['harga_barang']); ?></td>
                                     <td><?php echo htmlspecialchars($row['stok_barang']); ?></td>
                                     <td>
+                                    <?php
+                                    $gambarPath = 'uploads/' . htmlspecialchars($row['gambar']);
+                                    if (file_exists($gambarPath)) {
+                                        echo '<img src="' . $gambarPath . '" width=200>';
+                                    } else {
+                                        echo 'Gambar tidak ditemukan';
+                                    }
+                                    ?>
+                                    </td>
+                                        <td>
                                         <a href="index.php?page=barang&act=edit&id_barang=<?php echo $row['id_barang'] ?>" class="btn btn-info btn-sm">Edit</a>
                                         <a href="index.php?page=barang&act=hapus&id_barang=<?php echo $row['id_barang'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</a>
                                     </td>   
@@ -65,7 +76,7 @@
                             <?php
                                 }
                             } catch (PDOException $e) {
-                                echo 'Query failed: ' . $e->getMessage();
+                                echo 'Query failed: ' . htmlspecialchars($e->getMessage());
                             }
                             koneksi::disconnect();
                             ?>

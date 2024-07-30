@@ -1,12 +1,12 @@
 <?php
-class koneksi
+class Koneksi
 {
     private static $dbName = 'kasir_dh';
     private static $dbHost = 'localhost';
     private static $dbUsername = 'root';
     private static $dbPass = '';
 
-    private static $connection = null;
+    private static $instance = null;
 
     public function __construct() {
         die('Init function is not allowed');
@@ -14,23 +14,23 @@ class koneksi
 
     public static function connect()
     {
-        if (null == self::$connection)
+        if (null == self::$instance)
         {
             try
             {
-                self::$connection = new PDO("mysql:host=" . self::$dbHost . ";dbname=" . self::$dbName, self::$dbUsername, self::$dbPass);
+                self::$instance = new PDO("mysql:host=" . self::$dbHost . ";dbname=" . self::$dbName, self::$dbUsername, self::$dbPass);
             }
             catch(PDOException $e)
             {
                 die($e->getMessage());
             }
         }
-        return self::$connection;
+        return self::$instance;
     }
 
     public static function disconnect()
     {
-        self::$connection = null;
+        self::$instance = null;
     }
 }
 ?>

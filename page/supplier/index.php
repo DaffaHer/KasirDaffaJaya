@@ -45,31 +45,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                <?php
+                             <?php
 
-                            require_once 'database/koneksi.php';
                             $pdo = koneksi::connect();
-                            $sql = 'SELECT * FROM supplier';
-                            try {
-                                foreach ($pdo->query($sql) as $row) {
+                            $supplier = Supplier::getInstance($pdo);
+                            $dataSupplier= $supplier->getAll();
+                            $no = 1;
+                 
+                                foreach ($dataSupplier as $row) {
                             ?>  
                                 <tr>
-                                    <td><?php echo htmlspecialchars($row['id_supplier']); ?></td>
+                                    <td><?php echo $no++ ?></td>
                                     <td><?php echo htmlspecialchars($row['nama_supplier']); ?></td>
                                     <td><?php echo htmlspecialchars($row['alamat_supplier']); ?></td>
                                     <td><?php echo htmlspecialchars($row['no_telp']); ?></td>
                                     <td><?php echo htmlspecialchars($row['no_rekening']); ?></td>
                                     <td>
-                                        <a href="index.php?page=supplier&act=edit&id_supplier=<?php echo $row['id_supplier'] ?>" class="btn btn-info btn-sm">Edit</a>
-                                        <a href="index.php?page=supplier&act=hapus&id_supplier=<?php echo $row['id_supplier'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</a>
+                                    <a href="index.php?page=supplier&act=edit&id_supplier=<?php echo $row['id_supplier'] ?>" class="btn btn-info btn-sm">Edit</a>
+                                    <a href="index.php?page=supplier&act=hapus&id_supplier=<?php echo $row['id_supplier'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</a>
                                     </td>   
                                 </tr>
                             <?php
                                 }
-                            } catch (PDOException $e) {
-                                echo 'Query failed: ' . $e->getMessage();
-                            }
-                            koneksi::disconnect();
+                                 koneksi::disconnect();
                             ?>
                                         </tbody>
                                     </table>

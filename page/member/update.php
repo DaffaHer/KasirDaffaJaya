@@ -1,55 +1,39 @@
-<?php 
-
+<<?php
 if (empty($_GET['id_member'])) {
-    echo "<script> window.location.href = 'index.php?page=member' </script>";
+    header("Location: index.php?page=member");
     exit();
 }
 
 $id_member = $_GET['id_member'];
+$pdo = koneksi::connect();
+$member = Member::getInstance($pdo);
 
 if (isset($_POST['simpan'])) {
+    $nama = htmlspecialchars($_POST['nama']);
+    $alamat = htmlspecialchars($_POST['alamat']);
+    $jenis_kelamin = htmlspecialchars($_POST['jenis_kelamin']);
+    $total_poin = htmlspecialchars($_POST['total_poin']);
+    $no_telp = htmlspecialchars($_POST['no_telp']);
 
-    $id_member = $_POST['id_member'];
-    $nama = $_POST['nama'];
-    $alamat = $_POST['alamat'];
-    $jenis_kelamin = $_POST['jenis_kelamin'];
-    $total_poin = $_POST['total_poin'];
-    $no_telp = $_POST['no_telp'];
-
-    try {
-        $pdo = koneksi::connect();
-        $sql = "UPDATE member SET nama=?, alamat=?, jenis_kelamin=?, total_poin=?, no_telp=? WHERE id_member=?";
-        $q = $pdo->prepare($sql);
-        $q->execute(array($nama, $alamat, $jenis_kelamin, $total_poin, $no_telp, $id_member));
-        koneksi::disconnect();
-
-        echo "<script> window.location.href = 'index.php?page=member' </script>";
+    if ($member->update($id_member, $nama, $alamat, $jenis_kelamin, $total_poin, $no_telp)) {
+        header("Location: index.php?page=member");
         exit();
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+    } else {
+        echo "Terjadi kesalahan saat menyimpan data.";
     }
 } else {
-    try {
-        $pdo = koneksi::connect();
-        $sql = "SELECT * FROM member WHERE id_member = ?";
-        $q = $pdo->prepare($sql);
-        $q->execute(array($id_member));
-        $data = $q->fetch(PDO::FETCH_ASSOC);
+    $data = $member->getID($id_member);
 
-        if (!$data) {
-            echo "<script> window.location.href = 'index.php?page=member' </script>";
-            exit();
-        }
-
-        $nama = $data['nama'];
-        $alamat = $data['alamat'];
-        $jenis_kelamin = $data['jenis_kelamin'];
-        $total_poin = $data['total_poin'];
-        $no_telp = $data['no_telp'];
-        koneksi::disconnect();
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+    if (!$data) {
+        header("Location: index.php?page=member");
+        exit();
     }
+
+    $nama = htmlspecialchars($data['nama']);
+    $alamat = htmlspecialchars($data['alamat']);
+    $jenis_kelamin = htmlspecialchars($data['jenis_kelamin']);
+    $total_poin = htmlspecialchars($data['total_poin']);
+    $no_telp = htmlspecialchars($data['no_telp']);
 }
 ?>
 <!DOCTYPE html>
@@ -105,9 +89,14 @@ if (isset($_POST['simpan'])) {
         </div>
     </div>
 
+    
     <script src="asset/dist/js/adminlte.min.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </body>
 </html>

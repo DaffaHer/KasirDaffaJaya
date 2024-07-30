@@ -50,12 +50,13 @@
 
                             require_once 'database/koneksi.php';
                             $pdo = koneksi::connect();
-                            $sql = 'SELECT * FROM member';
-                            try {
-                                foreach ($pdo->query($sql) as $row) {
+                            $member = Member::getInstance($pdo);
+                            $dataMember= $member->getAll();
+                            $no=1;
+                                foreach ($dataMember as $row) {
                             ?>  
                                 <tr>
-                                    <td><?php echo htmlspecialchars($row['id_member']); ?></td>
+                                    <td><?php echo $no++?></td>
                                     <td><?php echo htmlspecialchars($row['nama']); ?></td>
                                     <td><?php echo htmlspecialchars($row['alamat']); ?></td>
                                     <td><?php echo htmlspecialchars($row['jenis_kelamin']); ?></td>
@@ -67,9 +68,6 @@
                                     </td>   
                                 </tr>
                             <?php
-                                }
-                            } catch (PDOException $e) {
-                                echo 'Query failed: ' . $e->getMessage();
                             }
                             koneksi::disconnect();
                             ?>

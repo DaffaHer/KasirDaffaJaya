@@ -47,11 +47,12 @@
                             require_once 'database/koneksi.php';
                             $pdo = koneksi::connect();
                             $sql = 'SELECT * FROM jenis_barang';
+                            $no = 1;
                             try {
                                 foreach ($pdo->query($sql) as $row) {
                             ?>  
                                 <tr>
-                                    <td><?php echo htmlspecialchars($row['id_jenis_barang']); ?></td>
+                                    <td><?php echo $no++?></td>
                                     <td><?php echo htmlspecialchars($row['nama_jenis_barang']); ?></td>
                                     <td>
                                         <a href="index.php?page=jenisbarang&act=edit&id_jenis_barang=<?php echo $row['id_jenis_barang'] ?>" class="btn btn-info btn-sm">Edit</a>

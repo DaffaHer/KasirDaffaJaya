@@ -1,3 +1,26 @@
+<?php
+
+$pdo = Koneksi::connect();
+$member = Member::getInstance($pdo);
+
+if (isset($_POST['simpan'])) {
+    $nama = htmlspecialchars($_POST['nama']);
+    $alamat = htmlspecialchars($_POST['alamat']);
+    $jenis_kelamin = htmlspecialchars($_POST['jenis_kelamin']);
+    $total_poin = htmlspecialchars($_POST['total_poin']);
+    $no_telp = htmlspecialchars($_POST['no_telp']);
+
+    $result = $member->add($nama, $alamat, $jenis_kelamin, $total_poin, $no_telp);
+
+    if ($result) {
+        echo "<script>window.location.href = 'index.php?page=member';</script>";
+    } else {
+        echo "Terjadi kesalahan saat menambahkan data.";
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,27 +82,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
-
-<?php
-require_once 'database/koneksi.php';
-
-if (isset($_POST['simpan'])) {
-    $nama = $_POST['nama'];
-    $alamat = $_POST['alamat'];
-    $jenis_kelamin = $_POST['jenis_kelamin'];
-    $total_poin = $_POST['total_poin'];
-    $no_telp = $_POST['no_telp'];
-
-    try {
-        $pdo = koneksi::connect();
-        $sql = "INSERT INTO member (nama, alamat, jenis_kelamin, total_poin, no_telp) VALUES (?, ?, ?, ?, ?)";
-        $q = $pdo->prepare($sql);
-        $q->execute(array($nama, $alamat, $jenis_kelamin, $total_poin, $no_telp));
-        
-        koneksi::disconnect();
-        echo "<script> window.location.href = 'index.php?page=member' </script>";
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-    }
-}
-?>

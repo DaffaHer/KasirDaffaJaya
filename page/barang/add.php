@@ -1,3 +1,33 @@
+<?php
+if (isset($_POST['simpan'])) {
+    $nama_barang = htmlspecialchars($_POST['nama_barang']);
+    $stok_barang = htmlspecialchars($_POST['stok_barang']);
+    $harga_barang = htmlspecialchars($_POST['harga_barang']);
+
+    $image = $_FILES["gambar"]["name"];
+    $tmpname = $_FILES["gambar"]["tmp_name"];
+    $error = $_FILES["gambar"]["error"];
+
+    if ($error === UPLOAD_ERR_OK) {
+        $newfilename = uniqid() . "." . pathinfo($image, PATHINFO_EXTENSION);
+        if (move_uploaded_file($tmpname, 'uploads/' . $newfilename)) {
+ 
+            $pdo = Koneksi::connect();
+            $barang = Barang::getInstance($pdo);
+            if ($barang->add($nama_barang, $harga_barang, $stok_barang, $newfilename)) {
+                echo "<script>window.location.href = 'index.php?page=barang'</script>";
+            } else {
+                echo "Terjadi kesalahan saat menyimpan data.";
+            }
+        } else {
+            echo "Terjadi kesalahan saat mengunggah gambar.";
+        }
+    } else {
+        echo "Terjadi kesalahan saat mengunggah gambar.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +39,6 @@
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="asset/plugins/fontawesome-free/css/all.min.css">
 </head>
-
 <body>
 <div class="content-wrapper">
     <div class="content-header">
@@ -43,53 +72,16 @@
                 <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
                 <a href="index.php?page=barang" class="btn btn-secondary">Kembali</a>
             </div>
-                        </form>
-                     </div>
-             </div>
+        </form>
     </div>
+</div>
+</div>
 
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="asset/dist/js/adminlte.min.js"></script>
-
+<!-- Bootstrap JS and dependencies -->
+<script src="asset/dist/js/adminlte.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 </body>
 </html>
-
-<?php
-
-if(isset($_POST['simpan'])){
-
-    $nama_barang = htmlspecialchars($_POST['nama_barang']);
-    $stok_barang = htmlspecialchars($_POST['stok_barang']);
-    $harga_barang = htmlspecialchars($_POST['harga_barang']);
-
-    $image = $_FILES["gambar"]["name"];
-    $tmpname = $_FILES["gambar"]["tmp_name"];
-    $error = $_FILES["gambar"]["error"];
-
-    if ($error === UPLOAD_ERR_OK) {
-        $newfilename = uniqid() . "." . pathinfo($image, PATHINFO_EXTENSION);
-        if (move_uploaded_file($tmpname, 'uploads/' . $newfilename)) {
-
-            $pdo = koneksi::connect();
-            $sql = "INSERT INTO barang (nama_barang,harga_barang,stok_barang,gambar) VALUES (?,?,?,?)";
-            $q = $pdo->prepare($sql);
-            $q->execute(array($nama_barang, $harga_barang, $stok_barang, $newfilename));
-            koneksi::disconnect();
-            
-            echo "<script> window.location.href = 'index.php?page=barang' </script>";
-        } else {
-            echo "Failed to move uploaded file.";
-        }
-    } else {
-        echo "Failed to upload file. Error code: " . $error;
-    }
-}
-
-?>

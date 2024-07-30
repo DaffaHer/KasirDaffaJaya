@@ -38,15 +38,16 @@
                                     <tr>
                                         <th width="50px">No</th>
                                         <th>Nama Barang</th>
+                                        <th>Jenis Barang</th>
                                         <th>Harga Satuan</th>
                                         <th>Stok Barang</th>
+                                        <th>Supplier Barang</th>
                                         <th>Gambar Barang</th>
                                         <th>AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-
                                     $pdo = Koneksi::connect();
                                     $barang = Barang::getInstance($pdo);
                                     $dataBarang = $barang->getAll();
@@ -57,8 +58,10 @@
                                         <tr>
                                             <td><?php echo $no++?></td>
                                             <td><?php echo htmlspecialchars($row['nama_barang']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['nama_jenis_barang']); ?></td> 
                                             <td><?php echo htmlspecialchars($row['harga_barang']); ?></td>
                                             <td><?php echo htmlspecialchars($row['stok_barang']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['nama_supplier']); ?></td>
                                             <td>
                                             <?php
                                             $gambarPath = 'uploads/' . htmlspecialchars($row['gambar']);
@@ -94,5 +97,6 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </body>
 </html>

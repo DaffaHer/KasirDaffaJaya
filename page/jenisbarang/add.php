@@ -1,3 +1,24 @@
+<?php
+
+$pdo = Koneksi::connect();
+$jenis_barang = Jenisbarang::getInstance($pdo);
+
+if (isset($_POST['simpan'])) {
+    $nama_jenis_barang = htmlspecialchars($_POST['nama_jenis_barang']);
+
+
+    $result = $jenis_barang->add($nama_jenis_barang);
+
+    if ($result) {
+        echo "<script>window.location.href = 'index.php?page=jenisbarang';</script>";
+    } else {
+        echo "Terjadi kesalahan saat menambahkan data.";
+    }
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,19 +65,3 @@
 
 </body>
 </html>
-
-<?php
-
-if(isset($_POST['simpan'])){
-
-    $nama_jenis_barang = $_POST['nama_jenis_barang'];
-    
-    $pdo = koneksi::connect();
-    $sql = "INSERT INTO jenis_barang (nama_jenis_barang) VALUES (?)";
-    $q = $pdo->prepare($sql);
-    $q->execute(array($nama_jenis_barang));
-
-    koneksi::disconnect();
-    echo "<script> window.location.href = 'index.php?page=jenisbarang' </script> ";
-}
-?>

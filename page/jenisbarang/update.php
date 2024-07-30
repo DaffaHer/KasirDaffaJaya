@@ -1,47 +1,32 @@
-<?php 
-
+<?php
 if (empty($_GET['id_jenis_barang'])) {
-    echo "<script> window.location.href = 'index.php?page=jenisbarang' </script>";
+    header("Location: index.php?page=jenisbarang");
     exit();
 }
 
 $id_jenis_barang = $_GET['id_jenis_barang'];
+$pdo = koneksi::connect();
+$jenis_barang = Jenisbarang::getInstance($pdo);
 
 if (isset($_POST['simpan'])) {
+    $nama_jenis_barang = htmlspecialchars($_POST['nama_jenis_barang']);
 
-    $id_jenis_barang = $_POST['id_jenis_barang'];
-    $nama_jenis_barang = $_POST['nama_jenis_barang'];
-
-    try {
-        $pdo = koneksi::connect();
-        $sql = "UPDATE jenis_barang SET nama_jenis_barang=? WHERE id_jenis_barang=?";
-        $q = $pdo->prepare($sql);
-        $q->execute(array($nama_jenis_barang, $id_jenis_barang));
-        koneksi::disconnect();
-
-        echo "<script> window.location.href = 'index.php?page=jenisbarang' </script>";
+    if ($jenis_barang->update($id_jenis_barang, $nama_jenis_barang)) {
+        header("Location: index.php?page=jenisbarang");
         exit();
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+    } else {
+        echo "Terjadi kesalahan saat menyimpan data.";
     }
 } else {
-    try {
-        $pdo = koneksi::connect();
-        $sql = "SELECT * FROM jenis_barang WHERE id_jenis_barang = ?";
-        $q = $pdo->prepare($sql);
-        $q->execute(array($id_jenis_barang));
-        $data = $q->fetch(PDO::FETCH_ASSOC);
+    $data = $jenis_barang->getID($id_jenis_barang);
 
-        if (!$data) {
-            echo "<script> window.location.href = 'index.php?page=jenisbarang' </script>";
-            exit();
-        }
-
-        $nama_jenis_barang = $data['nama_jenis_barang'];
-        koneksi::disconnect();
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+    if (!$data) {
+        header("Location: index.php?page=jenisbarang");
+        exit();
     }
+
+    $nama_jenis_barang = htmlspecialchars($data['nama_jenis_barang']);
+
 }
 ?>
 <!DOCTYPE html>
@@ -59,14 +44,14 @@ if (isset($_POST['simpan'])) {
 
     <div class="content-wrapper">
         <div class="content-header">
-            <div class="container mt-5">
+            <div class="container mt-2">
                 <div class="mb-4">
                     <h3>Edit Jenis Barang</h3>
                 </div>
                 <form action="" method="post">
                     <div class="form-group">
-                        <label>Nama Jenis Barang</label>
-                        <input name="nama_jenis_barang" type="text" class="form-control" placeholder="Nama Jenis Barang" required value="<?php echo htmlspecialchars($nama_jenis_barang); ?>">
+                        <label> Jenis Barang</label>
+                        <input name="nama_jenis_barang" type="text" class="form-control" placeholder="Jenis Barang" required value="<?php echo htmlspecialchars($nama_jenis_barang); ?>">
                     </div>
                     <input type="hidden" name="id_jenis_barang" value="<?php echo htmlspecialchars($id_jenis_barang); ?>">
                     <div class="form-group">

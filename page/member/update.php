@@ -1,4 +1,4 @@
-<<?php
+<?php
 if (empty($_GET['id_member'])) {
     header("Location: index.php?page=member");
     exit();
@@ -50,7 +50,7 @@ if (isset($_POST['simpan'])) {
 
     <div class="content-wrapper">
         <div class="content-header">
-            <div class="container mt-5">
+            <div class="container mt-2">
                 <div class="mb-4">
                     <h3>Edit Member</h3>
                 </div>

@@ -1,5 +1,5 @@
 <?php
-    include_once "database/koneksi.php";
+    include_once "database/class/jenisbarang.php";
     include_once "database/koneksi.php";
 
 $act = isset($_GET['act']) ? $_GET['act'] : '';

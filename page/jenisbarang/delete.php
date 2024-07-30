@@ -4,9 +4,15 @@
 
  $id_jenis_barang = $_GET['id_jenis_barang'];
 
-        $pdo = koneksi::connect();
-        $sql = "DELETE FROM jenis_barang WHERE id_jenis_barang = ?";
-        $q = $pdo->prepare($sql);
-        $q->execute(array($id_jenis_barang));
-        koneksi::disconnect();
-        echo "<script> window.location.href = 'index.php?page=jenisbarang' </script> ";
+ $pdo = koneksi::connect();
+ $jenis_barang = Jenisbarang::getInstance($pdo);
+ $result = $jenis_barang->delete($id_jenis_barang);
+ koneksi::disconnect();
+ 
+ if ($result) {
+     echo "<script>window.location.href = 'index.php?page=jenisbarang';</script>";
+ } else {
+     echo "Terjadi kesalahan saat menghapus data.";
+ }
+ 
+ ?>

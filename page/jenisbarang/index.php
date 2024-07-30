@@ -44,12 +44,11 @@
                     <tbody>
                 <?php
 
-                            require_once 'database/koneksi.php';
                             $pdo = koneksi::connect();
-                            $sql = 'SELECT * FROM jenis_barang';
+                            $jenis_barang = Jenisbarang::getInstance($pdo);
+                            $dataJenisbarang= $jenis_barang->getAll();
                             $no = 1;
-                            try {
-                                foreach ($pdo->query($sql) as $row) {
+                                foreach ($dataJenisbarang as $row) {
                             ?>  
                                 <tr>
                                     <td><?php echo $no++?></td>
@@ -60,9 +59,6 @@
                                     </td>   
                                 </tr>
                             <?php
-                                }
-                            } catch (PDOException $e) {
-                                echo 'Query failed: ' . $e->getMessage();
                             }
                             koneksi::disconnect();
                             ?>

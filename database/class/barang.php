@@ -19,13 +19,15 @@ class Barang
     }
 
     // FUNCTION TAMBAH BARANG START
-    public function add($nama_barang, $harga_barang, $stok_barang, $gambar)
+    public function add($nama_barang, $id_jenis_barang, $harga_barang, $stok_barang, $id_supplier, $gambar)
     {
         try {
-            $stmt = $this->db->prepare("INSERT INTO barang (nama_barang, harga_barang, stok_barang, gambar) VALUES (:nama_barang, :harga_barang, :stok_barang, :gambar)");
+            $stmt = $this->db->prepare("INSERT INTO barang (nama_barang, id_jenis_barang, harga_barang, stok_barang, id_supplier, gambar) VALUES (:nama_barang, :id_jenis_barang, :harga_barang, :stok_barang, :id_supplier, :gambar)");
             $stmt->bindParam(":nama_barang", $nama_barang);
+            $stmt->bindParam(":id_jenis_barang", $id_jenis_barang);
             $stmt->bindParam(":harga_barang", $harga_barang);
             $stmt->bindParam(":stok_barang", $stok_barang);
+            $stmt->bindParam(":id_supplier", $id_supplier);
             $stmt->bindParam(":gambar", $gambar);
             $stmt->execute();
             return true;
@@ -50,49 +52,52 @@ class Barang
     // FUNCTION TAMBAH BARANG END
 
     // FUNCTION EDIT BARANG START
-
-    public function update($id_barang, $nama_barang, $harga_barang, $stok_barang, $gambar)
-{
-    try {
-        $stmt = $this->db->prepare("UPDATE barang SET nama_barang=:nama_barang, harga_barang=:harga_barang, stok_barang=:stok_barang, gambar=:gambar WHERE id_barang=:id_barang");
-
-        $stmt->bindParam(":id_barang", $id_barang);
-        $stmt->bindParam(":nama_barang", $nama_barang);
-        $stmt->bindParam(":harga_barang", $harga_barang);
-        $stmt->bindParam(":stok_barang", $stok_barang);
-        $stmt->bindParam(":gambar", $gambar);
-
-        $stmt->execute();
-
-        return true;
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-        return false;
+    public function update($id_barang, $nama_barang, $id_jenis_barang, $harga_barang, $stok_barang, $id_supplier, $gambar)
+    {
+        try {
+            $stmt = $this->db->prepare("UPDATE barang SET nama_barang=:nama_barang, id_jenis_barang=:id_jenis_barang, harga_barang=:harga_barang, stok_barang=:stok_barang, id_supplier=:id_supplier, gambar=:gambar WHERE id_barang=:id_barang");
+    
+            $stmt->bindParam(":id_barang", $id_barang);
+            $stmt->bindParam(":nama_barang", $nama_barang);
+            $stmt->bindParam(":id_jenis_barang", $id_jenis_barang);
+            $stmt->bindParam(":harga_barang", $harga_barang);
+            $stmt->bindParam(":stok_barang", $stok_barang);
+            $stmt->bindParam(":id_supplier", $id_supplier);
+            $stmt->bindParam(":gambar", $gambar);
+    
+            $stmt->execute();
+    
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
-}
 
     // FUNCTION EDIT BARANG END
     
     // FUNCTION EDIT TANPA MENGUBAH GAMBAR START
-    public function updateWithoutImage($id_barang, $nama_barang, $harga_barang, $stok_barang)
-{
-    try {
-        $stmt = $this->db->prepare("UPDATE barang SET nama_barang=:nama_barang, harga_barang=:harga_barang, stok_barang=:stok_barang WHERE id_barang=:id_barang");
-
-        $stmt->bindParam(":id_barang", $id_barang);
-        $stmt->bindParam(":nama_barang", $nama_barang);
-        $stmt->bindParam(":harga_barang", $harga_barang);
-        $stmt->bindParam(":stok_barang", $stok_barang);
-
-        $stmt->execute();
-
-        return true;
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-        return false;
+    public function updateWithoutImage($id_barang, $nama_barang, $id_jenis_barang, $harga_barang, $stok_barang, $id_supplier)
+    {
+        try {
+            $stmt = $this->db->prepare("UPDATE barang SET nama_barang=:nama_barang, id_jenis_barang=:id_jenis_barang, harga_barang=:harga_barang, stok_barang=:stok_barang, id_supplier=:id_supplier WHERE id_barang=:id_barang");
+    
+            $stmt->bindParam(":id_barang", $id_barang);
+            $stmt->bindParam(":nama_barang", $nama_barang);
+            $stmt->bindParam(":id_jenis_barang", $id_jenis_barang);
+            $stmt->bindParam(":harga_barang", $harga_barang);
+            $stmt->bindParam(":stok_barang", $stok_barang);
+            $stmt->bindParam(":id_supplier", $id_supplier);
+    
+            $stmt->execute();
+    
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
-}
-// end
+    // FUNCTION EDIT TANPA MENGUBAH GAMBAR END
 
     // FUNCTION DELETE BARANG START
     public function delete($id_barang)
@@ -109,11 +114,14 @@ class Barang
     }
     // FUNCTION DELETE BARANG END
 
-    // FUNCTION GET ALL BARANG START
+    // FUNCTION GET Inner join START
     public function getAll()
     {
         try {
-            $stmt = $this->db->prepare("SELECT * FROM barang");
+            $stmt = $this->db->prepare("SELECT barang.*, jenis_barang.nama_jenis_barang, supplier.nama_supplier 
+                                        FROM barang
+                                        JOIN jenis_barang ON jenis_barang.id_jenis_barang = barang.id_jenis_barang
+                                        JOIN supplier ON supplier.id_supplier = barang.id_supplier");
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $data;
@@ -122,6 +130,33 @@ class Barang
             return false;
         }
     }
+
     // FUNCTION GET ALL BARANG END
+
+    public function getAllJenisbarang()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT id_jenis_barang, nama_jenis_barang FROM jenis_barang");
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $data;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function getAllSupplier()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT id_supplier, nama_supplier FROM supplier");
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $data;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
 }
 ?>

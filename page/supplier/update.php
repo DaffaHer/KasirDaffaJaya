@@ -51,7 +51,7 @@ if (isset($_POST['simpan'])) {
     <div class="content-wrapper">
      <div class="content-header">
         
-            <div class="container mt-5">
+            <div class="container mt-2">
             <div class="mb-4">
             <h3>Edit Supplier</h3>
                 </div>

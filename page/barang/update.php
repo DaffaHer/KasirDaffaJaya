@@ -12,8 +12,10 @@ $barang = Barang::getInstance($pdo);
 
 if (isset($_POST['simpan'])) {
     $nama_barang = htmlspecialchars($_POST['nama_barang']);
+    $jenis_barang = htmlspecialchars($_POST['jenis_barang']);
     $harga_barang = htmlspecialchars($_POST['harga_barang']);
     $stok_barang = htmlspecialchars($_POST['stok_barang']);
+    $supplier = isset($_POST['supplier']) ? htmlspecialchars($_POST['supplier']) : '';
 
     if (!empty($_FILES['gambar']['name'])) {
         $extensi = explode(".", $_FILES['gambar']['name']);
@@ -22,13 +24,13 @@ if (isset($_POST['simpan'])) {
         $upload = move_uploaded_file($sumber, "uploads/" . $gambarbarang);
 
         if ($upload) {
-            $result = $barang->update($id_barang, $nama_barang, $harga_barang, $stok_barang, $gambarbarang);
+            $result = $barang->update($id_barang, $nama_barang, $jenis_barang, $harga_barang, $stok_barang, $supplier, $gambarbarang);
         } else {
             echo "Gagal mengunggah gambar.";
             exit();
         }
     } else {
-        $result = $barang->updateWithoutImage($id_barang, $nama_barang, $harga_barang, $stok_barang);
+        $result = $barang->updateWithoutImage($id_barang, $nama_barang, $jenis_barang, $harga_barang, $stok_barang, $supplier);
     }
 
     if ($result) {
@@ -39,18 +41,20 @@ if (isset($_POST['simpan'])) {
     }
 }
 
+$data = $barang->getID($id_barang);
+if (!$data) {
+    echo "<script>window.location.href = 'index.php?page=barang'</script>";
+    exit();
+}
 
-        $data = $barang->getID($id_barang);
-        if (!$data) {
-        echo "<script>window.location.href = 'index.php?page=barang'</script>";
-        exit();
-        }
+$nama_barang = htmlspecialchars($data['nama_barang']);
+$jenis_barang = htmlspecialchars($data['id_jenis_barang']);
+$harga_barang = htmlspecialchars($data['harga_barang']);
+$stok_barang = htmlspecialchars($data['stok_barang']);
+$supplier = htmlspecialchars($data['id_supplier']); 
 
-        $nama_barang = htmlspecialchars($data['nama_barang']);
-        $harga_barang = htmlspecialchars($data['harga_barang']);
-        $stok_barang = htmlspecialchars($data['stok_barang']);
+?>
 
-        ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +71,7 @@ if (isset($_POST['simpan'])) {
 <body>
 <div class="content-wrapper">
     <div class="content-header">
-        <div class="container mt-5">
+        <div class="container mt-2">
             <div class="mb-4">
                 <h3>Edit Barang</h3>
             </div>
@@ -79,13 +83,45 @@ if (isset($_POST['simpan'])) {
                 </div>
 
                 <div class="form-group">
+                        <label>Jenis Barang</label>
+                        <select name="jenis_barang" id="" class="form-control">
+                            <option value="">Pilih Jenis</option>
+                            <?php
+                            $pdo = Koneksi::connect();
+                            $barang = Barang::getInstance($pdo);
+                            ?>
+                            <?php foreach ($barang->getAllJenisbarang() as $jenis) : ?>
+                                <option value="<?= $jenis['id_jenis_barang'] ?>">
+                                    <?= $jenis['nama_jenis_barang'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                </div>
+
+                <div class="form-group">
+                        <label>Supplier Barang</label>
+                        <select name="supplier" id="" class="form-control">
+                            <option value="">Pilih Supplier</option>
+                            <?php
+                            $pdo = Koneksi::connect();
+                            $barang = Barang::getInstance($pdo);
+                            ?>
+                            <?php foreach ($barang->getAllSupplier() as $suppliers) : ?>
+                                <option value="<?= $suppliers['id_supplier'] ?>">
+                                    <?= $suppliers['nama_supplier'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                </div>
+
+                <div class="form-group">
                     <label>Harga Satuan</label>
-                    <input name="harga_barang" type="text" class="form-control" placeholder="Harga Satuan" value="<?php echo $harga_barang; ?>" required>
+                    <input name="harga_barang" type="number" class="form-control" placeholder="Harga Satuan" value="<?php echo $harga_barang; ?>" required>
                 </div>
                 
                 <div class="form-group">
                     <label>Stok Barang</label>
-                    <input name="stok_barang" type="text" class="form-control" placeholder="Stok Barang" value="<?php echo $stok_barang; ?>" required>
+                    <input name="stok_barang" type="number" class="form-control" placeholder="Stok Barang" value="<?php echo $stok_barang; ?>" required>
                 </div>
 
                 <div class="form-group">

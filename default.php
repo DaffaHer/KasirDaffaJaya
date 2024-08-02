@@ -17,6 +17,10 @@ $sqlSupplier ='SELECT COUNT(*) FROM supplier';
 $resultSupplier = $pdo->query($sqlSupplier);
 $jumlah_supplier = $resultSupplier->fetchColumn();
 
+$sqlUser ='SELECT COUNT(*) FROM user';
+$resultUser = $pdo->query($sqlUser);
+$jumlah_user = $resultUser->fetchColumn();
+
 ?>
 
 <!-- Content -->
@@ -74,6 +78,19 @@ $jumlah_supplier = $resultSupplier->fetchColumn();
                                     <i class="ion ion-soup-can"></i>
                                 </div>
                                 <a href="index.php?page=supplier" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-6">
+                        <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>User</h3>
+                                    <h1> <?= $jumlah_user ?> </h1>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-ios-world"></i>
+                                </div>
+                                <a href="index.php?page=user" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
 

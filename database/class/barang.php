@@ -49,7 +49,6 @@ class Barang
             return false;
         }
     }
-    // FUNCTION TAMBAH BARANG END
 
     // FUNCTION EDIT BARANG START
     public function update($id_barang, $nama_barang, $id_jenis_barang, $harga_barang, $stok_barang, $id_supplier, $gambar)
@@ -74,8 +73,6 @@ class Barang
         }
     }
 
-    // FUNCTION EDIT BARANG END
-    
     // FUNCTION EDIT TANPA MENGUBAH GAMBAR START
     public function updateWithoutImage($id_barang, $nama_barang, $id_jenis_barang, $harga_barang, $stok_barang, $id_supplier)
     {
@@ -97,7 +94,6 @@ class Barang
             return false;
         }
     }
-    // FUNCTION EDIT TANPA MENGUBAH GAMBAR END
 
     // FUNCTION DELETE BARANG START
     public function delete($id_barang)
@@ -112,28 +108,40 @@ class Barang
             return false;
         }
     }
-    // FUNCTION DELETE BARANG END
 
-    // FUNCTION GET Inner join START
-    public function getAll()
-    {
+    // FUNCTION GET BARANG BY ID START
+    public function getById($id_barang) {
         try {
-            $stmt = $this->db->prepare("SELECT barang.*, jenis_barang.nama_jenis_barang, supplier.nama_supplier 
-                                        FROM barang
-                                        JOIN jenis_barang ON jenis_barang.id_jenis_barang = barang.id_jenis_barang
-                                        JOIN supplier ON supplier.id_supplier = barang.id_supplier");
+            $stmt = $this->db->prepare("SELECT * FROM barang WHERE id_barang = :id_barang");
+            $stmt->bindParam(':id_barang', $id_barang, PDO::PARAM_INT);
             $stmt->execute();
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $data;
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo $e->getMessage();
             return false;
         }
     }
 
-    // FUNCTION GET ALL BARANG END
+    // FUNCTION GET ALL BARANG WITH INNER JOIN START
+    public function getAll()
+{
+    try {
+        $stmt = $this->db->prepare("SELECT barang.*, jenis_barang.nama_jenis_barang, supplier.nama_supplier 
+                                    FROM barang
+                                    JOIN jenis_barang ON jenis_barang.id_jenis_barang = barang.id_jenis_barang
+                                    JOIN supplier ON supplier.id_supplier = barang.id_supplier");
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+        return false;
+    }
+}
 
-    public function getAllJenisbarang()
+
+    // FUNCTION GET ALL JENIS BARANG START
+    public function getAllJenisBarang()
     {
         try {
             $stmt = $this->db->prepare("SELECT id_jenis_barang, nama_jenis_barang FROM jenis_barang");
@@ -146,6 +154,7 @@ class Barang
         }
     }
 
+    // FUNCTION GET ALL SUPPLIER START
     public function getAllSupplier()
     {
         try {

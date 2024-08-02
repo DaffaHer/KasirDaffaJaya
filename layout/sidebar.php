@@ -35,7 +35,12 @@
                                 <p>Member</p>
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a href="index.php?page=user" class="nav-link">
+                                <i class="nav-icon fas fa-key"></i>
+                                <p>User</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="index.php?page=supplier" class="nav-link">
                                 <i class="nav-icon fas fa-rss-square"></i>

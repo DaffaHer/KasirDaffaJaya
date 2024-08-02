@@ -36,6 +36,13 @@ switch ($halaman_get) {
         include('page/member/default.php');
         include('layout/footer.php');
         break;
+    
+    case 'user':
+        $title = "Halaman User";
+        include('layout/header.php');
+        include('page/user/default.php');
+        include('layout/footer.php');
+        break;
 
     case 'supplier':
         $title = "Halaman Supplier";

@@ -1,18 +1,28 @@
 <?php
+if (empty($_GET['id_barang'])) header("Location: index.php");
 
- if(empty($_GET['id_barang'])) header("Location: index.php");
+$id_barang = $_GET['id_barang'];
 
- $id_barang = $_GET['id_barang'];
+$pdo = koneksi::connect();
+$barang = barang::getInstance($pdo);
 
- $pdo = koneksi::connect();
- $barang = barang::getInstance($pdo);
- $result = $barang->delete($id_barang);
- koneksi::disconnect();
- 
- if ($result) {
-     echo "<script>window.location.href = 'index.php?page=barang';</script>";
- } else {
-     echo "Terjadi kesalahan saat menghapus data.";
- }
- 
- ?>
+
+$barangInfo = $barang->getID($id_barang);
+$namaFileGambar = $barangInfo['gambar']; 
+
+
+$result = $barang->delete($id_barang);
+
+if ($result) {
+    $pathToFile = "uploads/" . $namaFileGambar;
+    if (file_exists($pathToFile)) {
+        unlink($pathToFile);
+    }
+
+    echo "<script>window.location.href = 'index.php?page=barang';</script>";
+} else {
+    echo "Terjadi kesalahan saat menghapus data.";
+}
+
+koneksi::disconnect();
+?>

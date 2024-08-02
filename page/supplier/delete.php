@@ -5,7 +5,7 @@
  $id_supplier = $_GET['id_supplier'];
 
  $pdo = koneksi::connect();
- $supplier = supplier::getInstance($pdo);
+ $supplier = Supplier::getInstance($pdo);
  $result = $supplier->delete($id_supplier);
  koneksi::disconnect();
  

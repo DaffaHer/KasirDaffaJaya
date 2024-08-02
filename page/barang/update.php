@@ -83,35 +83,31 @@ $supplier = htmlspecialchars($data['id_supplier']);
                 </div>
 
                 <div class="form-group">
-                        <label>Jenis Barang</label>
-                        <select name="jenis_barang" id="" class="form-control">
-                            <option value="">Pilih Jenis</option>
-                            <?php
-                            $pdo = Koneksi::connect();
-                            $barang = Barang::getInstance($pdo);
-                            ?>
-                            <?php foreach ($barang->getAllJenisbarang() as $jenis) : ?>
-                                <option value="<?= $jenis['id_jenis_barang'] ?>">
-                                    <?= $jenis['nama_jenis_barang'] ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                    <label>Jenis Barang</label>
+                    <select name="jenis_barang" class="form-control">
+                        <option value="">Pilih Jenis</option>
+                        <?php
+                        $jenisBarangList = $barang->getAllJenisBarang();
+                        foreach ($jenisBarangList as $jenis) {
+                            $selected = $jenis_barang == $jenis['id_jenis_barang'] ? 'selected' : '';
+                            echo "<option value='{$jenis['id_jenis_barang']}' $selected>{$jenis['nama_jenis_barang']}</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
 
                 <div class="form-group">
-                        <label>Supplier Barang</label>
-                        <select name="supplier" id="" class="form-control">
-                            <option value="">Pilih Supplier</option>
-                            <?php
-                            $pdo = Koneksi::connect();
-                            $barang = Barang::getInstance($pdo);
-                            ?>
-                            <?php foreach ($barang->getAllSupplier() as $suppliers) : ?>
-                                <option value="<?= $suppliers['id_supplier'] ?>">
-                                    <?= $suppliers['nama_supplier'] ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                    <label>Supplier Barang</label>
+                    <select name="supplier" class="form-control">
+                        <option value="">Pilih Supplier</option>
+                        <?php
+                        $supplierList = $barang->getAllSupplier();
+                        foreach ($supplierList as $supplierItem) {
+                            $selected = $supplier == $supplierItem['id_supplier'] ? 'selected' : '';
+                            echo "<option value='{$supplierItem['id_supplier']}' $selected>{$supplierItem['nama_supplier']}</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
 
                 <div class="form-group">
@@ -125,30 +121,23 @@ $supplier = htmlspecialchars($data['id_supplier']);
                 </div>
 
                 <div class="form-group">
-                    <label>Gambar Barang (Kosongkan saja jika tidak ingin mengganti ^_^)</label>
-                    <input name="gambar" type="file" class="form-control" placeholder="Gambar">
+                    <label>Gambar Barang (Kosongkan jika tidak ingin mengganti)</label>
+                    <input name="gambar" type="file" class="form-control">
                 </div>
 
                 <div class="form-group">
                     <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
                     <a href="index.php?page=barang" class="btn btn-secondary">Kembali</a>
                 </div>
-
-
             </form>
         </div>
     </div>
 </div>
 
-
 <!-- Bootstrap JS -->
 <script src="asset/dist/js/adminlte.min.js"></script>
-
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

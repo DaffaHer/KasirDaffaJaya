@@ -105,4 +105,3 @@ class Supplier
     // FUNCTION GET ALL SUPPLIER END
 }
 
-?>

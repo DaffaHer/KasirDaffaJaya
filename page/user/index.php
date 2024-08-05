@@ -47,7 +47,7 @@
                         <tbody>
                                 <?php
 
-                                $pdo = koneksi::connect();
+                                $pdo = Koneksi::connect();
                                 $user = User::getInstance($pdo);
                                 $dataUser= $user->getAll();
                                 $no = 1;

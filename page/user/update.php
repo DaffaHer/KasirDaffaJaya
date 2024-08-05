@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 if (empty($_GET['id_user'])) {
     header("Location: index.php?page=user");
     exit();
@@ -12,8 +14,14 @@ if (isset($_POST['simpan'])) {
     $nama = htmlspecialchars($_POST['nama']);
     $username = htmlspecialchars($_POST['username']);
     $email = htmlspecialchars($_POST['email']);
-    $password = htmlspecialchars($_POST['password']);
     $role = $_POST['role'];
+
+    // Periksa apakah password diisi
+    if (!empty($_POST['password'])) {
+        $password = htmlspecialchars($_POST['password']);
+    } else {
+        $password = null; // Tidak update password jika tidak diisi
+    }
 
     if ($user->update($id_user, $nama, $username, $email, $password, $role)) {
         header("Location: index.php?page=user");
@@ -32,7 +40,6 @@ if (isset($_POST['simpan'])) {
     $nama = htmlspecialchars($data['nama']);
     $username = htmlspecialchars($data['username']);
     $email = htmlspecialchars($data['email']);
-    $password = htmlspecialchars($data['password']);
     $role = htmlspecialchars($data['role']);
 }
 ?>

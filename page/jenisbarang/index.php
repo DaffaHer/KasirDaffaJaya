@@ -44,7 +44,7 @@
                     <tbody>
                 <?php
 
-                            $pdo = koneksi::connect();
+                            $pdo = Koneksi::connect();
                             $jenis_barang = Jenisbarang::getInstance($pdo);
                             $dataJenisbarang= $jenis_barang->getAll();
                             $no = 1;

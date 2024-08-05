@@ -47,7 +47,7 @@
                     <tbody>
                              <?php
 
-                            $pdo = koneksi::connect();
+                            $pdo = Koneksi::connect();
                             $supplier = Supplier::getInstance($pdo);
                             $dataSupplier= $supplier->getAll();
                             $no = 1;

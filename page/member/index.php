@@ -49,7 +49,7 @@
                 <?php
 
                             require_once 'database/koneksi.php';
-                            $pdo = koneksi::connect();
+                            $pdo = Koneksi::connect();
                             $member = Member::getInstance($pdo);
                             $dataMember= $member->getAll();
                             $no=1;

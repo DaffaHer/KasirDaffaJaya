@@ -55,22 +55,22 @@ class User
     public function update($id_user, $nama, $username, $email, $password, $role)
     {
         try {
-            $hashPasswd = password_hash($password, PASSWORD_DEFAULT);
+            if ($password !== null) {
+                $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+                $stmt = $this->db->prepare("UPDATE user SET nama = :nama, username = :username, email = :email, password = :password, role = :role WHERE id_user = :id_user");
+                $stmt->bindParam(':password', $passwordHash, PDO::PARAM_STR);
+            } else {
+                $stmt = $this->db->prepare("UPDATE user SET nama = :nama, username = :username, email = :email, role = :role WHERE id_user = :id_user");
+            }
 
-            $stmt = $this->db->prepare("UPDATE user SET nama=:nama, username=:username, email=:email, password=:password, role=:role WHERE id_user=:id_user");
+            $stmt->bindParam(':nama', $nama, PDO::PARAM_STR);
+            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':role', $role, PDO::PARAM_STR);
+            $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 
-            $stmt->bindParam(":id_user", $id_user);
-            $stmt->bindParam(":nama", $nama);
-            $stmt->bindParam(":username", $username);
-            $stmt->bindParam(":email", $email);
-            $stmt->bindParam(":password", $hashPasswd);
-            $stmt->bindParam(":role", $role);
-
-            $stmt->execute();
-
-            return true;
+            return $stmt->execute();
         } catch (PDOException $e) {
-            echo $e->getMessage();
             return false;
         }
     }
@@ -121,21 +121,20 @@ class User
     }
 
     public function updatePassword($id_user, $new_password)
-{
-    try {
-        $hashPasswd = password_hash($new_password, PASSWORD_DEFAULT);
+    {
+        try {
+            $hashPasswd = password_hash($new_password, PASSWORD_DEFAULT);
 
-        $stmt = $this->db->prepare("UPDATE user SET password=:password WHERE id_user=:id_user");
-        $stmt->bindParam(":id_user", $id_user);
-        $stmt->bindParam(":password", $hashPasswd);
+            $stmt = $this->db->prepare("UPDATE user SET password=:password WHERE id_user=:id_user");
+            $stmt->bindParam(":id_user", $id_user);
+            $stmt->bindParam(":password", $hashPasswd);
 
-        $stmt->execute();
+            $stmt->execute();
 
-        return true;
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-        return false;
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
-}
-
 }

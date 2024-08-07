@@ -17,7 +17,7 @@ switch ($act) {
         break;
 
     case 'confirm-password':
-        include('confirm    password.php');
+        include('confirmpassword.php');
         break;
     case 'change-password':
         include('changepassword.php');

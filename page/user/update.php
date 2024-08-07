@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 if (empty($_GET['id_user'])) {
     header("Location: index.php?page=user");

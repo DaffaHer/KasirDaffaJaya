@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,19 +16,27 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href=""><i class="fas fa-bars"></i></a>
                 </li>
+                                        <!-- <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['user']['username'] ?></span>
+                                <img class="img-profile rounded-circle" src="assets/img/undraw_profile.svg">
+                            </a> -->
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="index.php" class="nav-link">Dashboard</a>
+                    <li class="nav-item d-none d-sm-inline-block">
+                    <a href="index.php?page=logout" class="nav-link">| Logout</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i class="fas fa-user"></i></a>
+                    <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="index.php">
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['user']['role'] ?></span>
+                    <i class="fas fa-user"></i></a>
+
                 </li>
             </ul>
         </nav>
-        
+
         <!-- Bagian Sidebar -->
         <?php include 'layout/sidebar.php'; ?>
-        
         <?php include 'database/koneksi.php'; ?>
-        <!-- Header End -->

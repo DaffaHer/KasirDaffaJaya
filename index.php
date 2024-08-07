@@ -1,10 +1,31 @@
 <?php
+session_start();
 
-if(isset($_GET['page']))
-{
+
+if (isset($_GET['page'])) {
     $halaman_get = $_GET['page'];
-}else{
+} else {
     $halaman_get = "";
+}
+
+if (!isset($_SESSION['user'])) {
+    if ($halaman_get == "register") {
+    } else if ($halaman_get != "login") {
+        header('Location: index.php?page=login');
+        exit();
+    }
+} else {
+    if ($halaman_get == "login") {
+        header('Location: index.php');
+        exit();
+    }
+}
+
+
+if (isset($_SESSION['user'])) {
+    if ($halaman_get == "login" ||  $halaman_get == "register") {
+        header('Location: index.php?');
+    }
 }
 
 switch ($halaman_get) {
@@ -49,6 +70,15 @@ switch ($halaman_get) {
         include('layout/header.php');
         include('page/supplier/default.php');
         include('layout/footer.php');
+        break;
+
+    case 'login':
+        $title = "Halaman login";
+        include('page/user/login.php');
+        break;
+
+    case 'logout':
+        include('page/user/logout.php');
         break;
 
 

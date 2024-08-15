@@ -1,15 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Tabel Barang</title>
-    <!-- Link AdminLte-Css -->
-    <link rel="stylesheet" href="asset/dist/css/adminlte.min.css">
-    <!-- FontAwesome for icons -->
-    <link rel="stylesheet" href="asset/plugins/fontawesome-free/css/all.min.css">
-</head>
-<body>
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
@@ -54,28 +42,28 @@
                                     $no = 1;
 
                                     foreach ($dataBarang as $row) {
-                                    ?>  
+                                    ?>
                                         <tr>
-                                            <td><?php echo $no++?></td>
+                                            <td><?php echo $no++ ?></td>
                                             <td><?php echo htmlspecialchars($row['nama_barang']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['nama_jenis_barang']); ?></td> 
+                                            <td><?php echo htmlspecialchars($row['nama_jenis_barang']); ?></td>
                                             <td><?php echo htmlspecialchars($row['harga_barang']); ?></td>
                                             <td><?php echo htmlspecialchars($row['stok_barang']); ?></td>
                                             <td><?php echo htmlspecialchars($row['nama_supplier']); ?></td>
                                             <td>
-                                            <?php
-                                            $gambarPath = 'uploads/' . htmlspecialchars($row['gambar']);
-                                            if (file_exists($gambarPath)) {
-                                                echo '<img src="' . $gambarPath . '" width=200>';
-                                            } else {
-                                                echo 'Gambar tidak ditemukan';
-                                            }
-                                            ?>
+                                                <?php
+                                                $gambarPath = 'asset/img/barang/' . htmlspecialchars($row['gambar']);
+                                                if (file_exists($gambarPath)) {
+                                                    echo '<img src="' . $gambarPath . '" width=200>';
+                                                } else {
+                                                    echo 'Gambar tidak ditemukan';
+                                                }
+                                                ?>
                                             </td>
                                             <td>
                                                 <a href="index.php?page=barang&act=edit&id_barang=<?php echo $row['id_barang'] ?>" class="btn btn-info btn-sm">Edit</a>
-                                                <a href="index.php?page=barang&act=hapus&id_barang=<?php echo $row['id_barang'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</a>
-                                            </td>   
+                                                <button class="btn btn-danger btn-sm" onclick="hapusData(<?php echo $row['id_barang']; ?>)">Hapus</button>
+                                            </td>
                                         </tr>
                                     <?php
                                     }
@@ -92,11 +80,21 @@
     </section>
 </div>
 
-<!-- AdminLTE JS -->
-<script src="asset/dist/js/adminlte.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-</body>
-</html>
+<script>
+    function hapusData(id) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'index.php?page=barang&act=hapus&id_barang=' + id;
+            }
+        });
+    }
+</script>

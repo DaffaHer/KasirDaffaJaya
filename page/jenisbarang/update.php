@@ -1,6 +1,6 @@
 <?php
 if (empty($_GET['id_jenis_barang'])) {
-    header("Location: index.php?page=jenisbarang");
+    echo "<script>window.location.href = 'index.php?page=jenisbarang'</script>";
     exit();
 }
 
@@ -12,7 +12,7 @@ if (isset($_POST['simpan'])) {
     $nama_jenis_barang = htmlspecialchars($_POST['nama_jenis_barang']);
 
     if ($jenis_barang->update($id_jenis_barang, $nama_jenis_barang)) {
-        header("Location: index.php?page=jenisbarang");
+        echo "<script>window.location.href = 'index.php?page=jenisbarang'</script>";
         exit();
     } else {
         echo "Terjadi kesalahan saat menyimpan data.";
@@ -21,7 +21,7 @@ if (isset($_POST['simpan'])) {
     $data = $jenis_barang->getID($id_jenis_barang);
 
     if (!$data) {
-        header("Location: index.php?page=jenisbarang");
+        echo "<script>window.location.href = 'index.php?page=jenisbarang'</script>";
         exit();
     }
 
@@ -29,18 +29,6 @@ if (isset($_POST['simpan'])) {
 
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Jenis Barang</title>
-    
-    <link rel="stylesheet" href="asset/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="asset/plugins/fontawesome-free/css/all.min.css">
-
-</head>
-<body>
 
     <div class="content-wrapper">
         <div class="content-header">
@@ -62,11 +50,3 @@ if (isset($_POST['simpan'])) {
             </div>
         </div>
     </div>
-
-    <script src="asset/dist/js/adminlte.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-</body>
-</html>

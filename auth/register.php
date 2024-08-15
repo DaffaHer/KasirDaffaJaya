@@ -1,3 +1,38 @@
+<?php
+
+require_once 'database/koneksi.php';
+require_once 'database/class/auth.php';
+
+$pdo = Koneksi::connect();
+$user = Auth::getInstance($pdo);
+
+if ($user->isLoggedIn()) {
+  header("Location: app/index.php");
+}
+
+if (isset($_POST["register"])) {
+    $nama = htmlspecialchars($_POST["nama"]);
+    $username = htmlspecialchars($_POST["username"]);
+    $email = htmlspecialchars($_POST["email"]);
+    $password = htmlspecialchars($_POST["password"]);
+    $role = $_POST["role"];
+
+    $result = $user->register($nama, $username, $email, $password, $role);
+
+    if ($result) {
+        echo "<div>
+                    <div class='alert alert-success text-center'>
+                        <div class='alert-title '>
+                        Berhasil Registrasi !! <a href='index.php?page=login'> >>Login<< </a>
+                    </div>
+          </div>";
+
+    } else {
+        echo "Terjadi kesalahan saat melakukan registrasi.";
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,14 +54,14 @@
 <div class="register-box">
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+      <a class="h1"><b>Kasir </b> Daffa</a>
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Register a new membership</p>
+      <p class="login-box-msg">Register a new User</p>
 
-      <form action="../../index.html" method="post">
+      <form action="" method="post">
         <div class="input-group mb-3">
-          <input type="text" name="nama" class="form-control" placeholder="Full name">
+          <input type="text" name="nama" class="form-control" placeholder="Full name" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -34,7 +69,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="text" name="username" class="form-control" placeholder="Username">
+          <input type="text" name="username" class="form-control" placeholder="Username" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -42,7 +77,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" placeholder="Email">
+          <input type="email" name="email" class="form-control" placeholder="Email" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -50,32 +85,32 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password">
+          <input type="password" name="password" class="form-control" placeholder="Password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-              <label for="agreeTerms">
-               I agree to the <a href="#">terms</a>
-              </label>
-            </div>
-          </div>
+        <div class="input-group mb-3">
+            <select class="form-control selectric" name="role" required>
+                <option value="#">Role</option>
+                <option value="kasir">kasir</option>
+                <option value="admin">Admin</option>
+                <option value="superadmin">Super Admin</option>
+            </select>
+       </div>
+       
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Register</button>
+          <button type="submit" name="register" class="btn btn-primary btn-block">Register</button>
           </div>
           <!-- /.col -->
         </div>
       </form>
 
 
-      <a href="login.html" class="text-center">I already have a membership</a>
+      <a href="index.php?page=login" class="text-center">I already have a membership</a>
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->

@@ -1,6 +1,6 @@
 <?php
 if (empty($_GET['id_member'])) {
-    header("Location: index.php?page=member");
+    echo "<script>window.location.href = 'index.php?page=member'</script>";
     exit();
 }
 
@@ -16,7 +16,7 @@ if (isset($_POST['simpan'])) {
     $no_telp = htmlspecialchars($_POST['no_telp']);
 
     if ($member->update($id_member, $nama, $alamat, $jenis_kelamin, $total_poin, $no_telp)) {
-        header("Location: index.php?page=member");
+        echo "<script>window.location.href = 'index.php?page=member'</script>";
         exit();
     } else {
         echo "Terjadi kesalahan saat menyimpan data.";
@@ -25,7 +25,7 @@ if (isset($_POST['simpan'])) {
     $data = $member->getID($id_member);
 
     if (!$data) {
-        header("Location: index.php?page=member");
+        echo "<script>window.location.href = 'index.php?page=member'</script>";
         exit();
     }
 
@@ -36,17 +36,6 @@ if (isset($_POST['simpan'])) {
     $no_telp = htmlspecialchars($data['no_telp']);
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Member</title>
-    
-    <link rel="stylesheet" href="asset/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="asset/plugins/fontawesome-free/css/all.min.css">
-</head>
-<body>
 
     <div class="content-wrapper">
         <div class="content-header">
@@ -88,15 +77,3 @@ if (isset($_POST['simpan'])) {
             </div>
         </div>
     </div>
-
-    
-    <script src="asset/dist/js/adminlte.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-</body>
-</html>

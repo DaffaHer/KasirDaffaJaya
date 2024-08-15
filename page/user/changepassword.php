@@ -24,17 +24,6 @@ if (isset($_POST['ganti_password'])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ganti Password</title>
-    <link rel="stylesheet" href="asset/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="asset/plugins/fontawesome-free/css/all.min.css">
-</head>
-<body>
-
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container mt-2">

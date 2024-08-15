@@ -1,14 +1,6 @@
-        <!-- Footer -->
-        <footer class="main-footer">
-            <div class="float-right d-none d-sm-block">
-                <b>V</b>1
-            </div>
-            <strong>Kasir </a>AdminLte</strong>
-        </footer>
-        <!-- Footer End -->
+<footer class="main-footer">
+    <div class="float-right d-none d-sm-inline">
+        Anything you want
     </div>
-    
-  <!-- Script -->
-    <script src="asset/dist/js/adminlte.min.js"></script>
-</body>
-</html>
+    <strong>&copy; 2024 <a href="index.php">KasirDaffaJaya</a>.</strong> Stay healthy 
+</footer>

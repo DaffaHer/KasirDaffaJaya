@@ -14,7 +14,7 @@ $namaFileGambar = $barangInfo['gambar'];
 $result = $barang->delete($id_barang);
 
 if ($result) {
-    $pathToFile = "uploads/" . $namaFileGambar;
+    $pathToFile = "asset/img/barang/" . $namaFileGambar;
     if (file_exists($pathToFile)) {
         unlink($pathToFile);
     }
@@ -26,3 +26,5 @@ if ($result) {
 
 koneksi::disconnect();
 ?>
+
+

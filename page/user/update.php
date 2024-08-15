@@ -1,7 +1,6 @@
 <?php
-
 if (empty($_GET['id_user'])) {
-    header("Location: index.php?page=user");
+    echo "<script>window.location.href = 'index.php?page=user'</script>";
     exit();
 }
 
@@ -22,8 +21,8 @@ if (isset($_POST['simpan'])) {
         $password = null; // Tidak update password jika tidak diisi
     }
 
-    if ($user->update($id_user, $nama, $username, $email, $password, $role)) {
-        header("Location: index.php?page=user");
+    if ($user->update($id_user, $nama, $username, $email, $role)) {
+        echo "<script>window.location.href = 'index.php?page=user'</script>";
         exit();
     } else {
         echo "Terjadi kesalahan saat menyimpan data.";
@@ -32,7 +31,7 @@ if (isset($_POST['simpan'])) {
     $data = $user->getID($id_user);
 
     if (!$data) {
-        header("Location: index.php?page=user");
+        echo "<script>window.location.href = 'index.php?page=barang'</script>";
         exit();
     }
 
@@ -42,17 +41,6 @@ if (isset($_POST['simpan'])) {
     $role = htmlspecialchars($data['role']);
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User</title>
-    <link rel="stylesheet" href="asset/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="asset/plugins/fontawesome-free/css/all.min.css">
-</head>
-<body>
 
 <div class="content-wrapper">
     <div class="content-header">
@@ -91,11 +79,3 @@ if (isset($_POST['simpan'])) {
         </div>
     </div>
 </div>
-
-<script src="asset/dist/js/adminlte.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>

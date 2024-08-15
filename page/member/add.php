@@ -20,19 +20,6 @@ if (isset($_POST['simpan'])) {
 }
 ?>
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Member</title>
-    <!-- AdminLte CSS -->
-    <link rel="stylesheet" href="asset/dist/css/adminlte.min.css">
-    <!-- FontAwesome for icons -->
-    <link rel="stylesheet" href="asset/plugins/fontawesome-free/css/all.min.css">
-</head>
-
 <body>
 <div class="content-wrapper">
     <div class="content-header">

@@ -52,16 +52,12 @@ class User
         }
     }
 
-    public function update($id_user, $nama, $username, $email, $password, $role)
+    public function update($id_user, $nama, $username, $email, $role)
     {
         try {
-            if ($password !== null) {
-                $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-                $stmt = $this->db->prepare("UPDATE user SET nama = :nama, username = :username, email = :email, password = :password, role = :role WHERE id_user = :id_user");
-                $stmt->bindParam(':password', $passwordHash, PDO::PARAM_STR);
-            } else {
-                $stmt = $this->db->prepare("UPDATE user SET nama = :nama, username = :username, email = :email, role = :role WHERE id_user = :id_user");
-            }
+                $stmt = $this->db->prepare("UPDATE user SET nama=:nama, username=:username, email=:email, role=:role WHERE id_user=:id_user");
+                $stmt = $this->db->prepare("UPDATE user SET nama=:nama, username=:username, email=:email, role=:role WHERE id_user=:id_user");
+        
 
             $stmt->bindParam(':nama', $nama, PDO::PARAM_STR);
             $stmt->bindParam(':username', $username, PDO::PARAM_STR);
@@ -69,7 +65,7 @@ class User
             $stmt->bindParam(':role', $role, PDO::PARAM_STR);
             $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 
-            return $stmt->execute();
+        return $stmt->execute();
         } catch (PDOException $e) {
             return false;
         }
@@ -78,7 +74,7 @@ class User
     public function delete($id_user)
     {
         try {
-            $stmt = $this->db->prepare("DELETE FROM user WHERE id_user = :id_user");
+            $stmt = $this->db->prepare("DELETE FROM user WHERE id_user=:id_user");
             $stmt->bindParam(":id_user", $id_user);
             $stmt->execute();
             return true;

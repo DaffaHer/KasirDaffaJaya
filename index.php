@@ -44,8 +44,8 @@ if (!$user->isLoggedIn()) {
         <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
             <div class="wrapper">
                 <!-- Header -->
-                <?php include 'layout/header.php'; ?>
                 <!-- Sidebar -->
+                <?php include 'layout/header.php'; ?>
                 <?php include 'layout/sidebar.php'; ?>
 
                 <!-- Loading -->

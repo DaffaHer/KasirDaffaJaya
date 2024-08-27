@@ -2,24 +2,24 @@
 
 class Member
 {
-        private $db;
-        private static $instance = null;
+    private $db;
+    private static $instance = null;
 
-        public function __construct($db_conn)
-        {
-            $this->db =$db_conn;
+    public function __construct($db_conn)
+    {
+        $this->db = $db_conn;
+    }
+
+    public static function getInstance($pdo)
+    {
+        if (self::$instance == null) {
+            self::$instance = new Member($pdo);
         }
 
-        public static function getInstance($pdo)
-        {
-            if(self::$instance == null){
-                self::$instance = new Member($pdo);
-            }
+        return self::$instance;
+    }
 
-            return self::$instance;
-        }
-
-         // FUNCTION TAMBAH MEMBER START
+    // FUNCTION TAMBAH MEMBER START
     public function add($nama, $alamat, $jenis_kelamin, $total_poin, $no_telp)
     {
         try {
@@ -58,16 +58,16 @@ class Member
     {
         try {
             $stmt = $this->db->prepare("UPDATE member SET nama=:nama, alamat=:alamat, jenis_kelamin=:jenis_kelamin, total_poin=:total_poin, no_telp=:no_telp WHERE id_member=:id_member");
-    
+
             $stmt->bindParam(":id_member", $id_member);
             $stmt->bindParam(":nama", $nama);
             $stmt->bindParam(":alamat", $alamat);
             $stmt->bindParam(":jenis_kelamin", $jenis_kelamin);
             $stmt->bindParam(":total_poin", $total_poin);
-            $stmt->bindParam(":no_telp", $no_telp); 
-    
+            $stmt->bindParam(":no_telp", $no_telp);
+
             $stmt->execute();
-    
+
             return true;
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -76,22 +76,35 @@ class Member
     }
     // FUNCTION UPDATE END
 
-     // FUNCTION DELETE MEMBER START
-     public function delete($id_member)
-     {
-         try {
-             $stmt = $this->db->prepare("DELETE FROM member WHERE id_member = :id_member");
-             $stmt->bindParam(":id_member", $id_member);
-             $stmt->execute();
-             return true;
-         } catch (PDOException $e) {
-             echo $e->getMessage();
-             return false;
-         }
-     }
-     // FUNCTION DELETE MEMBER END
+    // FUNCTION DELETE MEMBER START
+    public function delete($id_member)
+    {
+        try {
+            $stmt = $this->db->prepare("DELETE FROM member WHERE id_member = :id_member");
+            $stmt->bindParam(":id_member", $id_member);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
 
-     // FUNCTION GET ALL MEMBER START
+    public function getUmum()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT * FROM member WHERE nama = 'Umum'");
+            $stmt->execute();
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $data['id_member'];
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+    // FUNCTION DELETE MEMBER END
+
+    // FUNCTION GET ALL MEMBER START
     public function getAll()
     {
         try {
@@ -106,5 +119,3 @@ class Member
     }
     // FUNCTION GET ALL MEMBER END
 }
-
-?>

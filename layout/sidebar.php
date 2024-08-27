@@ -15,14 +15,14 @@
                 </li>
 
                 <!-- Barang Dropdown Menu -->
-                <li class="nav-item has-treeview <?php echo ($_GET['page'] == 'barang' || $_GET['page'] == 'jenisbarang') ? 'menu-open' : ''; ?>">
+                <li class="nav-item <?php echo ($_GET['page'] == 'barang' || $_GET['page'] == 'jenisbarang') ? 'menu-open' : ''; ?>">
                     <a href="#" class="nav-link <?php echo ($_GET['page'] == 'barang' || $_GET['page'] == 'jenisbarang') ? 'active' : ''; ?>">
                         <i class="nav-icon fas fa-shopping-bag"></i>
                         <p>
                             Barang
                             <i class="right fas fa-angle-left"></i>
                         </p>
-                    </a>    
+                    </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="index.php?page=barang" class="nav-link <?php echo ($_GET['page'] == 'barang') ? 'active' : ''; ?>">
@@ -48,7 +48,7 @@
                 </li>
 
                 <!-- User & Member & Supplier Dropdown Menu -->
-                <li class="nav-item has-treeview <?php echo ($_GET['page'] == 'user' || $_GET['page'] == 'member' || $_GET['page'] == 'supplier') ? 'menu-open' : ''; ?>">
+                <li class="nav-item <?php echo ($_GET['page'] == 'user' || $_GET['page'] == 'member' || $_GET['page'] == 'supplier') ? 'menu-open' : ''; ?>">
                     <a href="#" class="nav-link <?php echo ($_GET['page'] == 'user' || $_GET['page'] == 'member' || $_GET['page'] == 'supplier') ? 'active' : ''; ?>">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
@@ -58,12 +58,12 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <?php if ($_SESSION['user']['role'] == "superadmin") { ?>
-                        <li class="nav-item">
-                            <a href="index.php?page=user" class="nav-link <?php echo ($_GET['page'] == 'user') ? 'active' : ''; ?>">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>User</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="index.php?page=user" class="nav-link <?php echo ($_GET['page'] == 'user') ? 'active' : ''; ?>">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>User</p>
+                                </a>
+                            </li>
                         <?php } ?>
                         <li class="nav-item">
                             <a href="index.php?page=member" class="nav-link <?php echo ($_GET['page'] == 'member') ? 'active' : ''; ?>">
@@ -72,12 +72,12 @@
                             </a>
                         </li>
                         <?php if ($_SESSION['user']['role'] == "superadmin" || $_SESSION['user']['role'] == "admin") { ?>
-                        <li class="nav-item">
-                            <a href="index.php?page=supplier" class="nav-link <?php echo ($_GET['page'] == 'supplier') ? 'active' : ''; ?>">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Supplier</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="index.php?page=supplier" class="nav-link <?php echo ($_GET['page'] == 'supplier') ? 'active' : ''; ?>">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Supplier</p>
+                                </a>
+                            </li>
                         <?php } ?>
                     </ul>
                 </li>

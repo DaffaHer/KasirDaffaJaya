@@ -1,6 +1,5 @@
 <?php
 
-
 class Transaksi
 {
     private $db;
@@ -38,7 +37,6 @@ class Transaksi
     public function getTransaksi()
     {
         try {
-
             $stmt = $this->db->prepare("SELECT * FROM transaksi JOIN member ON transaksi.id_member = member.id_member");
             $stmt->execute();
             return $stmt->fetchAll();
@@ -58,4 +56,70 @@ class Transaksi
             echo $th->getMessage();
         }
     }
+
+
+// BAGIAN DETAIL TRANSAKSI
+
+
+    public function getInvoiceByTransaksi($id_transaksi)
+    {
+        try {
+            // Query untuk mengambil nomor invoice berdasarkan ID transaksi
+            $stmt = $this->db->prepare("SELECT invoice FROM transaksi WHERE id_transaksi = :id_transaksi LIMIT 1");
+            $stmt->bindParam(':id_transaksi', $id_transaksi);
+            $stmt->execute();
+
+            // Mengambil hasil query
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Jika hasil ditemukan, kembalikan nomor invoice
+            if ($result) {
+                return $result['invoice'];
+            } else {
+                return null; // Jika tidak ditemukan, kembalikan null
+            }
+        } catch (PDOException $th) {
+            echo $th->getMessage();
+        }
+    }
+
+    public function getBarang()
+{
+    try {
+        // Query untuk mengambil semua data barang
+        $stmt = $this->db->prepare("SELECT * FROM barang");
+        $stmt->execute();
+
+        // Mengembalikan hasil query sebagai array asosiatif
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $th) {
+        echo $th->getMessage();
+    }
+}
+
+public function addDetail($id_transaksi, $id_barang, $qty)
+    {
+        try {
+
+            // if (!$this->cekJumlahProduk($id_barang, $qty)) {
+            //     echo 'Stok Tidak Cukup';
+            //     return false;
+            // }
+
+            $stmt = $this->db->prepare("INSERT INTO transkasi_detail (id_transaksi, id_barang, qty) VALUE ( :id_transaksi , :id_barang, :qty)");
+            $stmt->bindParam(":id_transaksi", $id_transaksi);
+            $stmt->bindParam(":id_barang", $id_barang);
+            $stmt->bindParam(":qty", $qty);
+            $stmt->execute();
+
+            // $this->KurangiStok($id_barang, $qty);
+
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+
+
 }

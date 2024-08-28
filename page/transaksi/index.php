@@ -37,7 +37,7 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </section>
-
+    
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
@@ -58,7 +58,7 @@ if (isset($_POST['submit'])) {
                                     <label for="member" class="col-sm-3 col-form-label">Member</label>
                                     <div class="col-9">
                                         <select name="id_member" id="member" class="form-control">
-                                            <option>-- Member --</option> <!-- Menggunakan value "0" untuk member umum -->
+                                            <option>-- Member --</option> 
                                             <?php
                                             foreach ($member->getAll() as $row):
                                             ?>

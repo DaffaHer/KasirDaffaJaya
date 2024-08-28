@@ -120,6 +120,31 @@ public function addDetail($id_transaksi, $id_barang, $qty)
         }
     }
 
+    public function getTransaksiDetail($id_transaksi)
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT * FROM transkasi_detail, barang WHERE transkasi_detail.id_barang = barang.id_barang AND id_transaksi = :id_transaksi");
+            $stmt->bindParam(":id_transaksi", $id_transaksi);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
 
+    public function hargatotal($id_transaksi)
+    {
+        try {
+
+            $stmt = $this->db->prepare("SELECT SUM(transkasi_detail.qty * barang.harga_barang) as total_harga FROM transkasi_detail JOIN barang ON transkasi_detail.id_barang = barang.id_barang WHERE id_transaksi = :id_transaksi");
+
+            $stmt->bindParam("id_transaksi", $id_transaksi);
+            $stmt->execute();
+            
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
 
 }

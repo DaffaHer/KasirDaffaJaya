@@ -30,6 +30,14 @@ if (!$user->isLoggedIn()) {
         }
         include('page/user/logout.php');
     } else {
+
+        $cetak = isset($_GET['cetak']) ? $_GET['cetak'] : 'cetak';
+        switch ($cetak) {
+            case 'struk':
+                include 'page/cetak/cetak.php';
+            case 'transaksi':
+                include 'page/transaksi/laporan.php';
+        }
 ?>
         <!DOCTYPE html>
         <html lang="en">
@@ -76,6 +84,9 @@ if (!$user->isLoggedIn()) {
                                 break;
                             case 'transaksi':
                                 include('page/transaksi/default.php');
+                                break;
+                            case 'struk':
+                                include('page/cetak/default.php');
                                 break;
                             case 'dashboard':
                             default:

@@ -1,26 +1,23 @@
 <?php
-    include_once "database/class/transaksi.php";
-    include_once "database/class/member.php";
-    include_once "database/class/barang.php";
-    include_once "database/koneksi.php";
-    
-    $act = isset($_GET['act']) ? $_GET['act'] : '';
-switch ($act) {
+include_once "database/koneksi.php";
+include_once "database/class/transaksi.php";
 
+$act = isset($_GET['act']) ? $_GET['act'] : '';
+switch ($act) {
+    
     case 'tambah':
-        include ('add.php');
-        break;
-    case 'detail':
-        include ('detail.php');
-        break;
-    case 'edit':
-        include ('update.php');
+        include 'index.php';
         break;
     case 'hapus':
-        include ('delete.php');
+        include 'delete.php';
         break;
-        
+    case 'cetak':
+        include 'cetak.php';
+        break;
+    case 'laporan':
+        include 'laporan.php';
+        break;
     default:
-        include ('index.php');
+        include 'laporan.php';
         break;
 }

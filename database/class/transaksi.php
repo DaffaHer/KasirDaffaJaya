@@ -2,149 +2,112 @@
 
 class Transaksi
 {
-    private $db;
     private static $instance = null;
+    private $pdo;
 
-    public function __construct($db_conn)
+    private function __construct($pdo)
     {
-        $this->db = $db_conn;
+        $this->pdo = $pdo;
     }
 
     public static function getInstance($pdo)
     {
-        if (self::$instance == null) {
-            self::$instance = new Transaksi($pdo);
+        if (self::$instance === null) {
+            self::$instance = new self($pdo);
         }
-
         return self::$instance;
     }
 
-    public function addTransaksi($id_kasir, $id_member, $tanggal, $invoice)
+    public function generateKodeNota()
     {
-        try {
-            $stmt = $this->db->prepare("INSERT INTO transaksi (id_kasir, id_member, tanggal, invoice) VALUES (:id_kasir, :id_member, :tanggal, :invoice)");
-            $stmt->bindParam(':id_kasir', $id_kasir);
-            $stmt->bindParam(':id_member', $id_member);
-            $stmt->bindParam(':tanggal', $tanggal);
-            $stmt->bindParam(':invoice', $invoice);
-            $stmt->execute();
-            return true;
-        } catch (PDOException $th) {
-            echo $th->getMessage();
-        }
+        // Query untuk mendapatkan nomor nota terbesar
+        $query = "SELECT MAX(invoice) as kodeTerbesar11 FROM transaksi";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $datanya = $stmt->fetch(PDO::FETCH_ASSOC);
+        $kodenota = $datanya['kodeTerbesar11'];
+
+        // Ambil urutan dari nomor nota
+        $urutan = (int) substr($kodenota, 9, 3);
+        $urutan++;
+
+        // Format tanggal
+        $tgl = date("jnyGi");
+
+        // Inisial huruf untuk nomor nota
+        $huruf = "BR";
+
+        // Hasil akhir nomor nota
+        $kodeCart = $huruf . $tgl . sprintf("%03s", $urutan);
+
+        return $kodeCart;
     }
 
-    public function getTransaksi()
+    public function insertTransaksi($id_user, $id_member, $tanggal, $invoice, $total_transaksi, $total_diskon, $ppn, $kembalian, $nominal_tunai, $subtotal, $pesan)
     {
+        $query = "INSERT INTO transaksi (id_user, id_member, tanggal, invoice, total_transaksi, total_diskon, ppn, kembalian, nominal_tunai, subtotal, pesan) VALUES (:id_user, :id_member, :tanggal, :invoice, :total_transaksi, :total_diskon, :ppn, :kembalian, :nominal_tunai, :subtotal, :pesan)";
+
         try {
-            $stmt = $this->db->prepare("SELECT * FROM transaksi JOIN member ON transaksi.id_member = member.id_member");
-            $stmt->execute();
-            return $stmt->fetchAll();
-        } catch (PDOException $th) {
-            echo $th->getMessage();
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute([
+                ':id_user' => $id_user,
+                ':id_member' => $id_member,
+                ':tanggal' => $tanggal,
+                ':invoice' => $invoice,
+                ':total_transaksi' => $total_transaksi,
+                ':total_diskon' => $total_diskon,
+                ':ppn' => $ppn,
+                ':kembalian' => $kembalian,
+                ':nominal_tunai' => $nominal_tunai,
+                ':subtotal' => $subtotal,
+                ':pesan' => $pesan
+            ]);
+        
+            return $this->pdo->lastInsertId();
+        } catch (PDOException $e) {
+            // Tangkap dan tampilkan error
+            echo "Error: " . $e->getMessage();
+            return false;
         }
+    }        
+
+    public function insertTransaksiDetails($id_transaksi, $id_barang, $qty, $harga, $subtotal)
+{
+    try {
+        $query = "INSERT INTO transaksi_details (id_transaksi, id_barang, qty, harga, subtotal) VALUES (:id_transaksi, :id_barang, :qty, :harga, :subtotal)";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            ':id_transaksi' => $id_transaksi,
+            ':id_barang' => $id_barang,
+            ':qty' => $qty,
+            ':harga' => $harga,
+            ':subtotal' => $subtotal
+        ]);
+    } catch (PDOException $e) {
+        // Tangkap dan tampilkan error
+        echo "Error: " . $e->getMessage();
+        return false;
+    }
+}
+
+
+    public function getLaporanPenjualan()
+    {
+        $stmt = $this->pdo->prepare("SELECT t.*, m.nama as member, u.nama as kasir FROM transaksi t JOIN member m ON t.id_member = m.id_member JOIN user u ON t.id_user = u.id_user ORDER BY t.tanggal DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function hapusTransaksi($id_transaksi)
     {
         try {
-            $stmt = $this->db->prepare("DELETE FROM transaksi WHERE id_transaksi = :id");
-            $stmt->bindParam(":id", $id_transaksi);
-            $stmt->execute();
-            return true;
-        } catch (PDOException $th) {
-            echo $th->getMessage();
-        }
-    }
-
-
-// BAGIAN DETAIL TRANSAKSI
-
-
-    public function getInvoiceByTransaksi($id_transaksi)
-    {
-        try {
-            // Query untuk mengambil nomor invoice berdasarkan ID transaksi
-            $stmt = $this->db->prepare("SELECT invoice FROM transaksi WHERE id_transaksi = :id_transaksi LIMIT 1");
-            $stmt->bindParam(':id_transaksi', $id_transaksi);
-            $stmt->execute();
-
-            // Mengambil hasil query
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            // Jika hasil ditemukan, kembalikan nomor invoice
-            if ($result) {
-                return $result['invoice'];
-            } else {
-                return null; // Jika tidak ditemukan, kembalikan null
-            }
-        } catch (PDOException $th) {
-            echo $th->getMessage();
-        }
-    }
-
-    public function getBarang()
-{
-    try {
-        // Query untuk mengambil semua data barang
-        $stmt = $this->db->prepare("SELECT * FROM barang");
-        $stmt->execute();
-
-        // Mengembalikan hasil query sebagai array asosiatif
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $th) {
-        echo $th->getMessage();
-    }
-}
-
-public function addDetail($id_transaksi, $id_barang, $qty)
-    {
-        try {
-
-            // if (!$this->cekJumlahProduk($id_barang, $qty)) {
-            //     echo 'Stok Tidak Cukup';
-            //     return false;
-            // }
-
-            $stmt = $this->db->prepare("INSERT INTO transkasi_detail (id_transaksi, id_barang, qty) VALUE ( :id_transaksi , :id_barang, :qty)");
+            $stmt = $this->pdo->prepare("DELETE FROM transaksi WHERE id_transaksi = :id_transaksi");
             $stmt->bindParam(":id_transaksi", $id_transaksi);
-            $stmt->bindParam(":id_barang", $id_barang);
-            $stmt->bindParam(":qty", $qty);
             $stmt->execute();
-
-            // $this->KurangiStok($id_barang, $qty);
-
             return true;
         } catch (PDOException $e) {
             echo $e->getMessage();
+            return false;
         }
     }
-
-    public function getTransaksiDetail($id_transaksi)
-    {
-        try {
-            $stmt = $this->db->prepare("SELECT * FROM transkasi_detail, barang WHERE transkasi_detail.id_barang = barang.id_barang AND id_transaksi = :id_transaksi");
-            $stmt->bindParam(":id_transaksi", $id_transaksi);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    public function hargatotal($id_transaksi)
-    {
-        try {
-
-            $stmt = $this->db->prepare("SELECT SUM(transkasi_detail.qty * barang.harga_barang) as total_harga FROM transkasi_detail JOIN barang ON transkasi_detail.id_barang = barang.id_barang WHERE id_transaksi = :id_transaksi");
-
-            $stmt->bindParam("id_transaksi", $id_transaksi);
-            $stmt->execute();
-            
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
 }
